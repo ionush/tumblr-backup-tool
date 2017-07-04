@@ -17,4 +17,6 @@ KNOWN ISSUES
 
 3.I haven't implemented the ability to decide where videos are saved to, so right now everything points to C:\\Users\\asus\\.spyder-py3\\my scripts\\data\ for videos and C:\\Users\\asus\\.spyder-py3\\my scripts\\data\\pics for pics
 
+4. The download bar provides incorrect data of download completion
+
 This is my first script! Any comments or suggestions or help very welcome!
