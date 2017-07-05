@@ -9,6 +9,12 @@ import requests
 import urllib
 import tqdm
 
+INSTRUCTIONS
+
+enter your tumblr login email and password in the login field (around line 35)
+run code
+follow instructions
+
 KNOWN ISSUES
 
 1.If a video doesn't exist anymore, the downloader will throw an error and exit the whole download queue instead of continuing
