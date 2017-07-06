@@ -26,3 +26,10 @@ KNOWN ISSUES
 4. The download bar provides incorrect data of download completion
 
 This is my first script! Any comments or suggestions or help very welcome!
+
+TO DO LIST
+
+1. Allow user to choose set file path upon running (with an ability to remember where you have picked)
+2. Implement a gui for entering username and password (with an ability to remember)
+3.Multithreading downloads
+
