@@ -17,26 +17,29 @@ Created on Mon Apr  3 16:30:20 2017
 '''
 import bs4
 import requests
-import urllib
 import urllib.request
-from urllib import HTTPError
 import re
 import os
 import sys
 import time
+from tqdm import tqdm
 
 #add storage file which can run straight away
-headers={'User-agent':'Mozilla/5.0'}
+x,y,z=[],[],[]
+webpage='https://www.tumblr.com/likes'
 session=requests.Session()
+a = requests.adapters.HTTPAdapter(max_retries=3)
+session.mount(webpage, a)
+headers={'User-agent':'Mozilla/5.0'}
 get=session.get('https://www.tumblr.com/login?redirect_to=%2Flikes', headers=headers)
 soup=bs4.BeautifulSoup(get.text, 'lxml')
 fk=(soup.find(attrs = {'name' : 'form_key'}))
-x,y,z=[],[],[]
+
 
 login= {
-        'determine_email':'ENTER EMAIL HERE',
-        'user[email]':'ENTER EMAIL HERE',
-        'user[password]':'ENTER PASSWORD HERE',
+        'determine_email':'neilasjoseph@gmail.com',
+        'user[email]':'neilasjoseph@gmail.com',
+        'user[password]':'kungfoo5225t',
         'tumblelog[name]':'',
         'user[age]':'',
         'context':'other',
@@ -48,7 +51,6 @@ login= {
     
 
 session.post('https://www.tumblr.com/login?redirect_to=%2Flikes', data=login, headers=headers)
-webpage='https://www.tumblr.com/likes'
 get1=session.get(webpage, headers=headers)
 soup1=bs4.BeautifulSoup(get1.text, 'lxml')
 page=(soup1.find('a', id='next_page_link'))
@@ -64,7 +66,7 @@ def next_page(page):
 inp=input("type 'all' to back up all data, or enter number of pages you wish to back up.")
 if inp=='all':
     start=time.time()
-    print('Scraping file list. This process will not take longer than 3 minutes.')
+    print('Scraping file list. This process will not take longer than 5 minutes.')
     while True:
         print('Video file list currently '+str(len(x))+' items long')
         get1=session.get(webpage, headers=headers)
@@ -77,8 +79,8 @@ if inp=='all':
         if nextp==None:
             print('No more pages to scrape')
             break
-        elif time.time()-start>180:
-            print('Scrape of code took more than 3 minutes. Stopping...')
+        elif time.time()-start>300:
+            print('Scrape of code took more than 5 minutes. Stopping...')
             break
         else:
             webpage='https://www.tumblr.com/likes'+nextp
@@ -88,9 +90,13 @@ else:
     start=time.time()
     try:
         inpp=int(inp)
+        print('Scraping file list. This process will not take longer than 5 minutes.')
     except:
         sys.exit('Incorrect sum. Cannot continue')
     for i in range(inpp):
+#        if i%10==0 and i!=0:
+#            print('re-logging in to avoid HTTPError')
+#            login()
         print('Video file list currently '+str(len(x))+' items long')
         get1=session.get(webpage, headers=headers)
         soup1=bs4.BeautifulSoup(get1.text, 'lxml')
@@ -102,8 +108,8 @@ else:
         if nextp==None:
             print('No more pages to scrape')
             break
-        elif time.time()-start>180:
-            print('Scrape of code took more than 3 minutes. Stopping...')
+        elif time.time()-start>300:
+            print('Scrape of code took more than 5 minutes. Stopping...')
             break
         else:
             webpage='https://www.tumblr.com/likes'+nextp
@@ -119,7 +125,7 @@ print(str(len(x))+' videos, '+str(len(y))+' photos, '+str(len(z))+ 'photosets')
 
 
 #download stage
-from tqdm import tqdm
+
 
 def pic_list(pics):
     pics=str(pics)
@@ -160,21 +166,27 @@ def name_function(name):
 #add timeout for download inactivity
 #add comparison for network file size vs local file size
 def vid_downloader(v_list):
-    os.chdir('C:\\Users\\asus\\.spyder-py3\\my scripts')
+    os.chdir('C:\\Users\\asus\\.spyder-py3\\my scripts\\')
+    number=0
     for vid in vid_list(v_list):
+        number+=1
         name=str(vid[-21:])
         name=name_function(name)
-        size=urllib.request.urlopen(vid)
-        size=int(size.info()['Content-Length'])
+        try:
+            size=urllib.request.urlopen(vid)
+            size=int(size.info()['Content-Length'])
+        except:
+            print('error with vid '+str(number )+' '+name)
+            continue
         url=str(vid)
         path = './data/'+name
         try:
             os.path.getsize(path)
         except (FileNotFoundError, NameError):
-                print('downloading vid ' + name)
+                print('downloading vid ' +str(number) +' '+ name)
                 r = requests.get(url, stream=True)
                 with open(path, 'wb') as f:
-                    for data in tqdm(r.iter_content(32*1024), total=size, unit='B', unit_scale=True, miniters=1):
+                    for data in tqdm(r.iter_content(1024), total=size, unit='KB', unit_scale=True, miniters=1):
                         f.write(data)
                         f.flush()
         except HTTPError:
@@ -182,12 +194,12 @@ def vid_downloader(v_list):
                 
         else: 
              if os.path.getsize(path)==size:
-                print('vid '+name+' already exists')
+                print('vid '+str(number)+' '+name+' already exists')
              elif os.path.getsize(path)<size:
-                print('Local file size incorrect, redownloading vid ' + name)
+                print('Local file size incorrect, redownloading vid ' +str(number)+' '+ name)
                 r = requests.get(url, stream=True)
                 with open(path, 'wb') as f:
-                    for data in tqdm(r.iter_content(32*1024), total=size, unit='B', unit_scale=True):
+                    for data in tqdm(r.iter_content(1024), total=size, unit='KB', unit_scale=True, miniters=1):
                         f.write(data)
                         f.flush()
         
@@ -200,9 +212,10 @@ def pics_downloader(pics):
     os.chdir('C:\\Users\\asus\\.spyder-py3\\my scripts\\data\\pics')
     for pic in pic_list(pics):
         name=str(pic[-27:])
+        name=name_function(name)
         url=str(pic)
         if os.path.isfile(name)==True:
-            break
+            continue
         else:
             print('downloading pic ' + name)
             r= requests.get(url, stream=True)
@@ -215,22 +228,27 @@ def photoset_downloader(pics):
     os.chdir('C:\\Users\\asus\\.spyder-py3\\my scripts\\data\\pics')
     for pic in photoset_list(pics):
         name=str(pic[-27:])
+        name=name_function(name)
         url=str(pic)
         if os.path.isfile(name)==True:
-            break
+            continue
         else:
             print('downloading ' + name + ' photoset')
-            r= requests.get(url, stream=True)
-            with open(name, 'wb') as f:
-                    for data in tqdm(r.iter_content(32*1024), unit='B', unit_scale=True):
-                        f.write(data)
-                        f.flush()
-    
+            try:
+                r= requests.get(url, stream=True)
+                with open(name, 'wb') as f:
+                        for data in tqdm(r.iter_content(32*1024), unit='B', unit_scale=True):
+                            f.write(data)
+                            f.flush()
+            except SSLError:
+                continue
+        
 def all_downloads(vids,pics,photoset):
     all_photo_downloader(pics,photoset)
     vid_downloader(vids)
     print('COMPLETE!')
 #
+
 all_downloads(x,y,z)
 
 
