@@ -25,6 +25,8 @@ KNOWN ISSUES
 
 4. The download bar provides incorrect data of download completion
 
+5. If selecting 'all', the script may throw an error as it gets to the end of the list. Best to select a specified number of pages to backup for now!
+
 This is my first script! Any comments or suggestions or help very welcome!
 
 TO DO LIST
