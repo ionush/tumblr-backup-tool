@@ -21,7 +21,7 @@ KNOWN ISSUES
 
 2. FIXED! If the download queue is very long, probability is at some point it will throw an access denied error
 
-3.I haven't implemented the ability to decide where videos are saved to, so right now everything points to C:\\Users\\asus\\.spyder-py3\\my scripts\\data\ for videos and C:\\Users\\asus\\.spyder-py3\\my scripts\\data\\pics for pics
+3. I haven't implemented the ability to decide where videos are saved to, so right now everything points to C:\\Users\\asus\\.spyder-py3\\my scripts\\data\ for videos and C:\\Users\\asus\\.spyder-py3\\my scripts\\data\\pics for pics
 
 4. The download bar provides incorrect data of download completion
 
