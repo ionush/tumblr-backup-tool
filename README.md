@@ -17,9 +17,9 @@ follow instructions
 
 KNOWN ISSUES
 
-1.If a video doesn't exist anymore, the downloader will throw an error and exit the whole download queue instead of continuing
+1. FIXED! If a video doesn't exist anymore, the downloader will throw an error and exit the whole download queue instead of continuing
 
-2.If the download queue is very long, probability is at some point it will throw an access denied error
+2. FIXED! If the download queue is very long, probability is at some point it will throw an access denied error
 
 3.I haven't implemented the ability to decide where videos are saved to, so right now everything points to C:\\Users\\asus\\.spyder-py3\\my scripts\\data\ for videos and C:\\Users\\asus\\.spyder-py3\\my scripts\\data\\pics for pics
 
@@ -31,5 +31,5 @@ TO DO LIST
 
 1. Allow user to choose set file path upon running (with an ability to remember where you have picked)
 2. Implement a gui for entering username and password (with an ability to remember)
-3.Multithreading downloads
+3. Multithreading downloads
 
