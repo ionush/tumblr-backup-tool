@@ -59,7 +59,10 @@ def next_page(page):
     page=str(page)
     regex=re.compile("/page/\d+/\d+")
     result=regex.findall(page)
-    return result[0]
+    if result==[]:
+        return []
+    else:
+        return result[0]
 
 
 
